@@ -1,0 +1,168 @@
+/* Markdown answers arrive as real block elements, so the bubble's pre-wrap
+   whitespace handling would double every gap. Normal flow instead. */
+.markdownBody {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.markdownBody > :first-child { margin-top: 0; }
+.markdownBody > :last-child { margin-bottom: 0; }
+
+.markdownBody p {
+  margin: 0 0 0.7em;
+  line-height: 1.55;
+}
+
+.markdownBody h1,
+.markdownBody h2,
+.markdownBody h3,
+.markdownBody h4 {
+  margin: 1.1em 0 0.5em;
+  line-height: 1.3;
+  font-weight: 600;
+  color: #fff;
+}
+
+.markdownBody h1 { font-size: 1.2rem; }
+.markdownBody h2 { font-size: 1.1rem; }
+.markdownBody h3 { font-size: 1rem; }
+.markdownBody h4 { font-size: 0.95rem; }
+
+.markdownBody ul,
+.markdownBody ol {
+  margin: 0 0 0.7em;
+  padding-left: 1.35em;
+}
+
+.markdownBody li {
+  margin-bottom: 0.3em;
+  line-height: 1.55;
+}
+
+.markdownBody li > ul,
+.markdownBody li > ol {
+  margin-top: 0.3em;
+}
+
+.markdownBody strong {
+  font-weight: 600;
+  color: #fff;
+}
+
+.markdownBody em { font-style: italic; }
+
+.markdownBody a {
+  color: #a5b4fc;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.markdownBody a:hover { color: #c7d2fe; }
+
+.markdownBody code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.85em;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 0.1em 0.35em;
+}
+
+.markdownBody pre {
+  margin: 0 0 0.7em;
+  padding: 12px 14px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  /* Long lines scroll inside the block instead of widening the chat. */
+  overflow-x: auto;
+}
+
+.markdownBody pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 0.82em;
+  line-height: 1.5;
+  white-space: pre;
+}
+
+.markdownBody blockquote {
+  margin: 0 0 0.7em;
+  padding: 2px 0 2px 12px;
+  border-left: 3px solid var(--accent-color);
+  color: var(--text-secondary);
+}
+
+.markdownBody hr {
+  border: none;
+  border-top: 1px solid var(--border-color);
+  margin: 1em 0;
+}
+
+/* Tables can be arbitrarily wide, so they get their own scroll container. */
+.markdownBody table {
+  display: block;
+  overflow-x: auto;
+  max-width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 0.7em;
+  font-size: 0.88em;
+}
+
+.markdownBody th,
+.markdownBody td {
+  border: 1px solid var(--border-color);
+  padding: 6px 10px;
+  text-align: left;
+}
+
+.markdownBody th {
+  background: var(--bg-primary);
+  font-weight: 600;
+}
+
+/* Citation badge — a real button so it's keyboard reachable. */
+.citationBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(99, 102, 241, 0.2);
+  color: #818cf8;
+  border: 1px solid rgba(99, 102, 241, 0.4);
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  font-size: 0.7rem;
+  font-weight: bold;
+  font-family: inherit;
+  line-height: 1;
+  margin: 0 3px;
+  padding: 0;
+  cursor: pointer;
+  vertical-align: super;
+  transition: background-color 0.2s, color 0.2s, transform 0.2s;
+}
+
+.citationBadge:hover {
+  background-color: var(--accent-color);
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.citationBadge:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+.inert {
+  cursor: default;
+  opacity: 0.55;
+}
+
+.inert:hover {
+  background-color: rgba(99, 102, 241, 0.2);
+  color: #818cf8;
+  transform: none;
+}

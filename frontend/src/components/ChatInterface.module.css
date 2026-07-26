@@ -90,28 +90,31 @@
   border: 1px solid var(--border-color);
 }
 
-.citationBadge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background-color: rgba(99, 102, 241, 0.2);
-  color: #818cf8;
-  border: 1px solid rgba(99, 102, 241, 0.4);
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  font-size: 0.7rem;
-  font-weight: bold;
-  margin: 0 4px;
-  cursor: pointer;
-  vertical-align: super;
-  transition: all 0.2s;
+/* Citation badge styling lives in MarkdownMessage.module.css, next to the
+   component that renders it. */
+
+.failed {
+  border-color: rgba(248, 113, 113, 0.35) !important;
+  color: var(--text-secondary);
 }
 
-.citationBadge:hover {
-  background-color: var(--accent-color);
-  color: #fff;
-  transform: translateY(-2px);
+.notice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 10px 20px 0;
+  padding: 8px 12px;
+  background: rgba(248, 113, 113, 0.1);
+  border: 1px solid rgba(248, 113, 113, 0.25);
+  border-radius: var(--radius-md);
+  color: #fca5a5;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  flex-shrink: 0;
+}
+
+.notice svg {
+  flex-shrink: 0;
 }
 
 .inputArea {
@@ -162,6 +165,29 @@
 .sendBtn:disabled {
   color: var(--text-secondary);
   cursor: not-allowed;
+}
+
+.sendBtn:focus-visible,
+.stopBtn:focus-visible,
+.clearChatBtn:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+/* Stop generating — replaces send while a response is streaming. */
+.stopBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: 50%;
+  color: #fca5a5;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.stopBtn:hover {
+  background: rgba(248, 113, 113, 0.15);
+  color: #fff;
 }
 
 /* Animated typing dots */
