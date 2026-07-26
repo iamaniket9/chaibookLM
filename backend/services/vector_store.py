@@ -1,5 +1,5 @@
 import chromadb
-from sentence_transformers import SentenceTransformer
+from fastembed import TextEmbedding
 import os
 import re
 
@@ -7,9 +7,8 @@ import re
 CHROMA_DATA_PATH = "./data/chroma"
 chroma_client = chromadb.PersistentClient(path=CHROMA_DATA_PATH)
 
-# Initialize HuggingFace embeddings (runs locally, no API key needed)
-# all-MiniLM-L6-v2 is fast and good enough for general RAG
-embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
+# Initialize local embeddings (ONNX-based, no torch needed)
+embedding_model = TextEmbedding("sentence-transformers/all-MiniLM-L6-v2")
 
 # Common English stop words — stripped from keyword match to avoid noise
 _STOP_WORDS = frozenset({
@@ -61,7 +60,7 @@ def add_chunks_to_vector_store(notebook_id: int, source_id: int, chunks: list[di
     ids = [f"source_{source_id}_chunk_{i}" for i in range(len(chunks))]
 
     # Generate embeddings
-    embeddings = embedding_model.encode(texts).tolist()
+    embeddings = [list(e) for e in embedding_model.embed(texts)]
 
     # Add to Chroma
     collection.add(
@@ -79,7 +78,7 @@ def search_chunks(notebook_id: int, query: str, top_k: int = 5):
     if collection.count() == 0:
         return []
 
-    query_embedding = embedding_model.encode([query]).tolist()[0]
+    query_embedding = list(embedding_model.embed([query]))[0]
 
     results = collection.query(
         query_embeddings=[query_embedding],

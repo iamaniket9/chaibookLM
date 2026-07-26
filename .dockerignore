@@ -1,0 +1,35 @@
+# Python virtual environment (513 MB!)
+backend/venv
+
+# Runtime data — created by the app at startup, no need in image
+backend/data
+
+# Bytecode
+**/__pycache__
+**/*.pyc
+**/*.pyo
+
+# Secrets
+backend/.env
+.env
+backend/youtube_cookies.txt
+
+# Git
+.git
+
+# Frontend — deploy separately or build in Docker
+frontend/node_modules
+frontend/dist
+frontend/build
+frontend/.vite
+
+# IDE / OS
+.vscode
+.idea
+.DS_Store
+Thumbs.db
+
+# Logs / temp
+*.log
+.pytest_cache
+.mypy_cache
