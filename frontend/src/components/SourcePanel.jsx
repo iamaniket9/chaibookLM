@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Upload, FileText, File, Link, Video, X, Sparkles, AlertTriangle, Loader2 } from 'lucide-react';
 import Modal from './Modal';
+import { BACKEND_URL } from '../config';
 import styles from './SourcePanel.module.css';
 
 const POLL_INTERVAL_MS = 3000;
@@ -47,7 +48,7 @@ export default function SourcePanel({ notebookId, onQuickQuery }) {
   const fetchSources = useCallback(async (signal) => {
     const requestId = requestIdRef.current;
     try {
-      const res = await fetch(`/api/sources/${notebookId}`, { signal });
+      const res = await fetch(`${BACKEND_URL}/api/sources/${notebookId}`, { signal });
       if (!res.ok) throw new Error(await describeError(res));
       const data = await res.json();
       if (requestId !== requestIdRef.current) return null;
@@ -102,7 +103,7 @@ export default function SourcePanel({ notebookId, onQuickQuery }) {
     if (url) formData.append('url', url);
 
     try {
-      const res = await fetch(`/api/sources/${notebookId}/upload`, {
+      const res = await fetch(`${BACKEND_URL}/api/sources/${notebookId}/upload`, {
         method: 'POST',
         body: formData,
       });
@@ -119,7 +120,7 @@ export default function SourcePanel({ notebookId, onQuickQuery }) {
   const handleDelete = async (sourceId) => {
     setError(null);
     try {
-      const res = await fetch(`/api/sources/${notebookId}/${sourceId}`, { method: 'DELETE' });
+      const res = await fetch(`${BACKEND_URL}/api/sources/${notebookId}/${sourceId}`, { method: 'DELETE' });
       if (!res.ok) throw new Error(await describeError(res));
       setSources(prev => prev.filter(s => s.id !== sourceId));
     } catch (e) {

@@ -5,6 +5,7 @@ import SourcePanel from './components/SourcePanel';
 import ChatInterface from './components/ChatInterface';
 import SourceViewer from './components/SourceViewer';
 import Modal from './components/Modal';
+import { BACKEND_URL } from './config';
 import styles from './App.module.css';
 
 function App() {
@@ -21,7 +22,7 @@ function App() {
 
   const fetchNotebooks = async () => {
     try {
-      const res = await fetch('/api/notebooks/');
+      const res = await fetch(`${BACKEND_URL}/api/notebooks/`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       if (!Array.isArray(data)) throw new Error('Unexpected response');
@@ -36,7 +37,7 @@ function App() {
 
   const createNotebook = async (name) => {
     try {
-      const res = await fetch('/api/notebooks/', {
+      const res = await fetch(`${BACKEND_URL}/api/notebooks/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name })
@@ -67,7 +68,7 @@ function App() {
     if (!id) return;
 
     try {
-      const res = await fetch(`/api/notebooks/${id}`, { method: 'DELETE' });
+      const res = await fetch(`${BACKEND_URL}/api/notebooks/${id}`, { method: 'DELETE' });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
       setNotebooks(prev => {

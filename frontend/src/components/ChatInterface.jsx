@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Send, Trash2, Square, AlertTriangle } from 'lucide-react';
 import MarkdownMessage from './MarkdownMessage';
+import { BACKEND_URL } from '../config';
 import styles from './ChatInterface.module.css';
 
 const GREETING = {
@@ -46,7 +47,7 @@ export default function ChatInterface({ notebookId, onCitationClick, externalQue
 
     (async () => {
       try {
-        const res = await fetch(`/api/chat/${notebookId}/history`, { signal: controller.signal });
+        const res = await fetch(`${BACKEND_URL}/api/chat/${notebookId}/history`, { signal: controller.signal });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
         if (cancelled || !Array.isArray(data)) return;
@@ -122,7 +123,7 @@ export default function ChatInterface({ notebookId, onCitationClick, externalQue
     };
 
     try {
-      const response = await fetch(`/api/chat/${notebookId}`, {
+      const response = await fetch(`${BACKEND_URL}/api/chat/${notebookId}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query: text, history: recentHistory }),
@@ -233,7 +234,7 @@ export default function ChatInterface({ notebookId, onCitationClick, externalQue
     setNotice(null);
 
     try {
-      const res = await fetch(`/api/chat/${notebookId}/history`, { method: 'DELETE' });
+      const res = await fetch(`${BACKEND_URL}/api/chat/${notebookId}/history`, { method: 'DELETE' });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
     } catch (e) {
       console.error('Failed to clear chat history', e);
