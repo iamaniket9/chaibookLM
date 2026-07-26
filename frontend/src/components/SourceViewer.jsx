@@ -1,4 +1,5 @@
 import { X, Quote } from 'lucide-react';
+import { BACKEND_URL } from '../config';
 import styles from './SourceViewer.module.css';
 
 /** Format seconds as H:MM:SS, M:SS, or 0:SS. */
@@ -102,7 +103,7 @@ export default function SourceViewer({ citation, onClose }) {
           {citation.filename ? (
             <iframe
               key={`pdf-${citation.filename}-page-${citation.page}`}
-              src={`/uploads/${citation.filename}#page=${citation.page}`}
+              src={`${BACKEND_URL}/uploads/${citation.filename}#page=${citation.page}`}
               className={styles.webIframe}
               title={`PDF Viewer - Page ${citation.page}`}
             />
