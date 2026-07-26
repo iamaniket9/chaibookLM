@@ -1,4 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+/* The Inter webfont is loaded via <link rel=preconnect/stylesheet> in
+   index.html. A CSS @import here would block rendering until this file is
+   parsed *and* the font CSS is fetched, serialising two round trips. */
 
 :root {
   --bg-primary: #0f1115;
@@ -29,6 +31,8 @@ body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
   height: 100vh;
+  /* dvh tracks mobile browser chrome so the layout isn't cut off. */
+  height: 100dvh;
   overflow: hidden;
 }
 

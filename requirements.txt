@@ -3,6 +3,7 @@ uvicorn
 sqlalchemy
 pydantic
 openai
+python-dotenv
 sentence-transformers
 chromadb
 pymupdf
@@ -12,4 +13,3 @@ youtube-transcript-api
 webvtt-py
 python-multipart
 yt-dlp
-google-genai

@@ -1,0 +1,138 @@
+/* Layout lives here rather than as inline styles so it can carry breakpoints. */
+
+.app {
+  display: flex;
+  height: 100vh;
+  /* dvh accounts for mobile browser chrome that appears and disappears. */
+  height: 100dvh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.workspace {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  min-width: 0;
+}
+
+.mainColumn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  gap: 20px;
+  overflow-y: auto;
+  min-width: 0;
+}
+
+.chatCard {
+  flex: 1;
+  min-height: 420px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.viewerColumn {
+  width: 40%;
+  min-width: 320px;
+  border-left: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+}
+
+/* Only used as an overlay dismiss target below the tablet breakpoint. */
+.viewerBackdrop {
+  display: none;
+}
+
+.emptyWorkspace {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 24px;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.globalError {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 900;
+  max-width: min(90vw, 520px);
+  padding: 10px 16px;
+  background: rgba(60, 20, 24, 0.95);
+  border: 1px solid rgba(248, 113, 113, 0.4);
+  border-radius: var(--radius-md);
+  color: #fca5a5;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
+/* ---------- Tablet: the source viewer becomes a slide-over ---------- */
+@media (max-width: 1100px) {
+  .viewerColumn {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 800;
+    width: min(90vw, 460px);
+    box-shadow: -12px 0 32px rgba(0, 0, 0, 0.5);
+  }
+
+  .viewerBackdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 799;
+    background: rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* ---------- Mobile: stack the sidebar above the workspace ---------- */
+@media (max-width: 820px) {
+  .app {
+    flex-direction: column;
+  }
+
+  .workspace {
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .mainColumn {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .chatCard {
+    /* Without a floor the chat collapses to nothing next to the source list. */
+    min-height: 60vh;
+  }
+
+  .viewerColumn {
+    width: 100%;
+    max-width: none;
+    top: auto;
+    height: 78dvh;
+    border-left: none;
+    border-top: 1px solid var(--border-color);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    box-shadow: 0 -12px 32px rgba(0, 0, 0, 0.5);
+  }
+
+  .globalError {
+    top: 8px;
+    max-width: 94vw;
+  }
+}

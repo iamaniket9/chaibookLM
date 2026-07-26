@@ -26,9 +26,16 @@
   color: #fff;
 }
 
+.closeBtn:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
 .contentArea {
   flex: 1;
-  overflow: auto;
+  /* Scrolling is delegated to .scrollArea so the preview pane can stay fixed. */
+  overflow: hidden;
+  min-height: 0;
   position: relative;
   background: var(--bg-primary);
 }
@@ -37,6 +44,7 @@
   width: 100%;
   padding-top: 56.25%; /* 16:9 Aspect Ratio */
   position: relative;
+  flex-shrink: 0;
 }
 
 .videoWrapper iframe {
@@ -51,6 +59,61 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+}
+
+/* Rich preview (video / PDF) stacked above the quoted passage. */
+.splitView {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+/* min-height:0 lets this shrink inside the flex column instead of overflowing. */
+.scrollArea {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.splitView .webIframe {
+  flex: 1 1 55%;
+  min-height: 220px;
+}
+
+.splitView .scrollArea {
+  flex: 0 1 auto;
+  max-height: 45%;
+  border-top: 1px solid var(--border-color);
+}
+
+.passage {
+  margin: 16px 20px 20px;
+  padding: 12px 14px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-left: 3px solid var(--accent-color);
+  border-radius: var(--radius-md);
+}
+
+.passageLabel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.passageText {
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: var(--text-primary);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
 .metadataBar {

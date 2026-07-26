@@ -1,7 +1,7 @@
 import os
 from openai import AsyncOpenAI
+from starlette.concurrency import run_in_threadpool
 from services.vector_store import hybrid_search_chunks
-import json
 
 # Initialize OpenAI client pointing to DeepSeek
 client = AsyncOpenAI(
@@ -9,18 +9,28 @@ client = AsyncOpenAI(
     base_url="https://api.deepseek.com/v1"
 )
 
+# How much of a retrieved chunk to hand back to the UI for the source viewer.
+CITATION_SNIPPET_CHARS = 1200
+
+
 async def stream_rag_response(notebook_id: int, query: str, history=None):
-    """
+    """Yield RAG events as plain dicts: {"type": "citations"|"message", ...}.
+
+    The caller is responsible for SSE framing. Keeping this layer free of wire
+    format means the chat router can also accumulate the answer for storage
+    without having to re-parse its own output.
+
     1. Retrieve chunks
     2. Build prompt with citations and conversation history
     3. Stream LLM response
     """
-    # 1. Retrieve — hybrid search (semantic + keyword) for better relevance
-    chunks = hybrid_search_chunks(notebook_id, query, top_k=10)
+    # 1. Retrieve — hybrid search (semantic + keyword) for better relevance.
+    # Embedding is blocking CPU work, so it runs on a worker thread; doing it
+    # inline would stall the event loop for every other request in flight.
+    chunks = await run_in_threadpool(hybrid_search_chunks, notebook_id, query, 10)
 
     if not chunks:
-        yield "data: " + json.dumps({"type": "message", "content": "I couldn't find any information about that in this notebook's sources."}) + "\n\n"
-        yield "data: [DONE]\n\n"
+        yield {"type": "message", "content": "I couldn't find any information about that in this notebook's sources."}
         return
 
     # Build context and metadata map
@@ -36,6 +46,9 @@ async def stream_rag_response(notebook_id: int, query: str, history=None):
         normalized_meta = {
             "type": str(meta.get("type", "")),
             "source_id": meta.get("source_id", ""),
+            # The retrieved passage itself, so the source viewer can show the
+            # user *what* was cited rather than a generic placeholder.
+            "text": chunk["text"][:CITATION_SNIPPET_CHARS],
         }
 
         # YouTube-specific fields
@@ -82,7 +95,7 @@ async def stream_rag_response(notebook_id: int, query: str, history=None):
         context_text += f"\n{source_label}\n{chunk['text']}\n"
 
     # Send citation map to frontend first
-    yield "data: " + json.dumps({"type": "citations", "citations": citation_map}) + "\n\n"
+    yield {"type": "citations", "citations": citation_map}
 
     # 2. Build messages list
     system_prompt = f"""You are an AI research assistant. Answer the user's question based ONLY on the provided context.
@@ -97,6 +110,7 @@ IMPORTANT INSTRUCTIONS:
 - Do not add a references section at the end. The UI will handle displaying citations.
 - Use the conversation history (if provided) to understand follow-up questions in context.
 - When a source shows a timestamp (e.g. "YouTube @ 2:34"), mention it in your answer so the user knows exactly when it was discussed (e.g. "...as discussed at 2:34 in the video [1].").
+- Format your answer in Markdown. Use headings, bold and bullet lists where they make the answer easier to scan.
 """
 
     # Build message list with optional conversation history
@@ -124,10 +138,6 @@ IMPORTANT INSTRUCTIONS:
 
         async for chunk in response:
             if chunk.choices and chunk.choices[0].delta.content is not None:
-                content = chunk.choices[0].delta.content
-                yield "data: " + json.dumps({"type": "message", "content": content}) + "\n\n"
-
-        yield "data: [DONE]\n\n"
+                yield {"type": "message", "content": chunk.choices[0].delta.content}
     except Exception as e:
-        yield "data: " + json.dumps({"type": "message", "content": f"\n\n**Error reaching DeepSeek API:** {str(e)}"}) + "\n\n"
-        yield "data: [DONE]\n\n"
+        yield {"type": "message", "content": f"\n\n**Error reaching DeepSeek API:** {str(e)}"}
