@@ -1,10 +1,5 @@
 import chromadb
-<<<<<<< HEAD
 from fastembed import TextEmbedding
-import os
-=======
-from sentence_transformers import SentenceTransformer
->>>>>>> 41755a12e7299e1a8c189e8379581317f6fd9fd5
 import re
 
 from paths import CHROMA_DIR
