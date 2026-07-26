@@ -29,10 +29,12 @@ app = FastAPI(title="ChaiBookLM API")
 app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
 
 # Configure CORS for frontend
+# allow_credentials=True is incompatible with allow_origins=["*"] per the CORS spec.
+# The frontend uses API-key auth (not cookies), so credentials are unnecessary.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # For production, restrict this
-    allow_credentials=True,
+    allow_origins=["*"],
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
