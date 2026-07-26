@@ -1,11 +1,11 @@
 {
   "rewrites": [
     {
-      "source": "/api/:path*",
+      "source": "/api/(.*)",
       "destination": "https://chaibooklm.onrender.com/api/:path*"
     },
     {
-      "source": "/uploads/:path*",
+      "source": "/uploads/(.*)",
       "destination": "https://chaibooklm.onrender.com/uploads/:path*"
     },
     {
