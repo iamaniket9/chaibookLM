@@ -1,0 +1,24 @@
+# YouTube Cookies Template
+#
+# HOW TO GET YOUR COOKIES:
+# 1. Install the browser extension "Get cookies.txt LOCALLY" (Chrome/Firefox)
+#    - Chrome: https://chromewebstore.google.com/detail/get-cookiestxt-locally/cclelndahbckbenkjhflpdbgdldlbecc
+#    - Firefox: https://addons.mozilla.org/en-US/firefox/addon/get-cookies-txt-locally/
+#
+# 2. Go to https://www.youtube.com and log in
+#
+# 3. Click the extension icon and export cookies for "youtube.com"
+#
+# 4. Save the file as "youtube_cookies.txt" in this (backend/) directory
+#    OR set the environment variable: YOUTUBE_COOKIES_PATH=/path/to/cookies.txt
+#
+# The file format is Netscape HTTP Cookie format (tab-separated):
+# domain  flag  path  secure  expiry  name  value
+#
+# At minimum, YouTube needs the CONSENT cookie to bypass IP blocks.
+# For better results, include all youtube.com cookies.
+#
+# Example (these are FAKE - replace with your own!):
+# .youtube.com	TRUE	/	FALSE	9999999999	CONSENT	YES+cb.20240101-01-p0.en+FX+999
+# .youtube.com	TRUE	/	FALSE	9999999999	VISITOR_INFO1_LIVE	abc123def456
+# .youtube.com	TRUE	/	FALSE	9999999999	VISITOR_PRIVACY_METADATA	CgJBRBIhEA%3D%3D

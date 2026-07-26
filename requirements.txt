@@ -1,0 +1,15 @@
+fastapi
+uvicorn
+sqlalchemy
+pydantic
+openai
+sentence-transformers
+chromadb
+pymupdf
+beautifulsoup4
+requests
+youtube-transcript-api
+webvtt-py
+python-multipart
+yt-dlp
+google-genai
