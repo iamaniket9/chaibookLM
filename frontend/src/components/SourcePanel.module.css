@@ -17,13 +17,48 @@
   margin-bottom: 12px;
 }
 
-.sourceLimit {
+.uploadingBadge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-size: 0.75rem;
   color: var(--text-secondary);
   background: var(--bg-tertiary);
   padding: 3px 8px;
   border-radius: var(--radius-sm);
   margin-bottom: 12px;
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.panelError {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  background: rgba(248, 113, 113, 0.1);
+  border: 1px solid rgba(248, 113, 113, 0.25);
+  border-radius: var(--radius-md);
+  color: #fca5a5;
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.panelError svg {
+  flex-shrink: 0;
+}
+
+.emptyState {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
 }
 
 .uploadControls {
@@ -52,6 +87,12 @@
   border-color: var(--accent-color);
 }
 
+.uploadBtn:focus-within,
+.uploadBtn:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
 .disabledBtn {
   opacity: 0.4;
   cursor: not-allowed !important;
@@ -72,6 +113,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  /* The error detail is a third child that needs a row of its own. */
+  flex-wrap: wrap;
+  gap: 8px;
   padding: 8px 12px;
   background: var(--bg-primary);
   border-radius: var(--radius-sm);

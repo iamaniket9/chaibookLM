@@ -90,10 +90,59 @@
   transition: all 0.2s;
 }
 
-.notebookItem:hover .deleteNbBtn {
+.notebookItem:hover .deleteNbBtn,
+.deleteNbBtn:focus-visible {
   opacity: 1;
 }
 
 .deleteNbBtn:hover {
   color: var(--error);
+}
+
+.addButton:focus-visible,
+.deleteNbBtn:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+/* Touch devices have no hover, so a hover-only control is unreachable. */
+@media (hover: none) {
+  .deleteNbBtn {
+    opacity: 1;
+  }
+}
+
+/* ---------- Mobile: the sidebar becomes a horizontal strip on top ---------- */
+@media (max-width: 820px) {
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+    flex-shrink: 0;
+  }
+
+  .header {
+    padding: 12px 16px;
+  }
+
+  .notebookList {
+    /* Scroll sideways instead of eating the screen height. */
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 8px 12px;
+    flex: 0 0 auto;
+  }
+
+  .notebookItem {
+    margin-bottom: 0;
+    flex: 0 0 auto;
+    padding: 8px 12px;
+  }
+
+  .notebookName {
+    max-width: 110px;
+  }
 }
