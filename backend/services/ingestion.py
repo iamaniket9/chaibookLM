@@ -6,19 +6,20 @@ from youtube_transcript_api import YouTubeTranscriptApi
 import webvtt
 import re
 import tempfile
-import json
 from typing import List, Dict
 
 def simple_chunker(text: str, chunk_size: int = 1000, overlap: int = 200) -> List[str]:
-    """A basic character-based chunker."""
+    """Split text into overlapping chunks.
+
+    `chunk_size` and `overlap` are counted in **words**, not characters. An
+    overlap greater than or equal to the chunk size would leave the cursor
+    stationary, so the step is clamped to at least one word.
+    """
     words = text.split()
-    chunks = []
-    i = 0
-    while i < len(words):
-        chunk = " ".join(words[i:i + chunk_size])
-        chunks.append(chunk)
-        i += chunk_size - overlap
-    return chunks
+    if not words:
+        return []
+    step = max(1, chunk_size - overlap)
+    return [" ".join(words[i:i + chunk_size]) for i in range(0, len(words), step)]
 
 def extract_pdf(file_path: str) -> List[Dict]:
     """Extracts text from PDF page by page."""

@@ -6,9 +6,10 @@ from dotenv import load_dotenv
 # Load env variables first, before importing routers that initialize API clients
 load_dotenv()
 
+from paths import UPLOAD_DIR
 from database import engine, Base
 import models
-from routers import notebooks, sources, chat, bonus
+from routers import notebooks, sources, chat
 
 # Create tables
 Base.metadata.create_all(bind=engine)
@@ -25,7 +26,7 @@ with engine.connect() as conn:
 app = FastAPI(title="ChaiBookLM API")
 
 # Mount uploads directory so frontend can access PDFs
-app.mount("/uploads", StaticFiles(directory="./data/uploads"), name="uploads")
+app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
 
 # Configure CORS for frontend
 app.add_middleware(
@@ -39,7 +40,6 @@ app.add_middleware(
 app.include_router(notebooks.router, prefix="/api/notebooks", tags=["Notebooks"])
 app.include_router(sources.router, prefix="/api/sources", tags=["Sources"])
 app.include_router(chat.router, prefix="/api/chat", tags=["Chat"])
-app.include_router(bonus.router, prefix="/api/bonus", tags=["Bonus"])
 
 @app.get("/")
 def read_root():

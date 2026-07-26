@@ -1,11 +1,11 @@
 import chromadb
 from sentence_transformers import SentenceTransformer
-import os
 import re
 
+from paths import CHROMA_DIR
+
 # Initialize ChromaDB client (local persistent)
-CHROMA_DATA_PATH = "./data/chroma"
-chroma_client = chromadb.PersistentClient(path=CHROMA_DATA_PATH)
+chroma_client = chromadb.PersistentClient(path=CHROMA_DIR)
 
 # Initialize HuggingFace embeddings (runs locally, no API key needed)
 # all-MiniLM-L6-v2 is fast and good enough for general RAG
